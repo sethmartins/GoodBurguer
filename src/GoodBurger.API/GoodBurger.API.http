@@ -1,0 +1,6 @@
+@GoodBurger.API_HostAddress = http://localhost:5251
+
+GET {{GoodBurger.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
