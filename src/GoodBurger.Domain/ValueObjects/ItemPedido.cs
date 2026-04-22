@@ -1,24 +1,30 @@
 ﻿using GoodBurger.Domain.Enums;
 using GoodBurger.Domain.Exceptions;
+using GoodBurger.Domain.Models;
 
 namespace GoodBurger.Domain.ValueObjects;
 
 public sealed class ItemPedido
 {
-    public string Nome { get; }
-    public decimal Preco { get; }
-    public TipoItem Tipo { get; }
+    public int ItemId { get; private set; }
+    public string Nome { get; private set; }
+    public decimal Preco { get; private set; }
+    public TipoItem Tipo { get; private set; }
 
-    public ItemPedido(string nome, decimal preco, TipoItem tipo)
+    private ItemPedido() { }
+
+    public ItemPedido(Item item)
     {
-        if (string.IsNullOrWhiteSpace(nome))
+        if (string.IsNullOrWhiteSpace(item.Nome))
             throw new DomainException("Nome é obrigatório");
 
-        if (preco <= 0)
+        if (item.Preco <= 0)
             throw new DomainException("Preço deve ser maior que zero");
 
-        Nome = nome;
-        Preco = preco;
-        Tipo = tipo;
+        ItemId = item.Id;
+        Nome = item.Nome;
+        Preco = item.Preco;
+        Tipo = item.Tipo;
     }
+   
 }

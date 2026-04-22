@@ -10,43 +10,57 @@ public sealed class Pedido
 
     private readonly List<ItemPedido> _itens = new();
     public IReadOnlyCollection<ItemPedido> Itens => _itens;
-
+    public decimal Subtotal { get; private set; }
+    public decimal Desconto { get; private set; }
+    public decimal PercentualDesconto { get; private set; }
     public decimal Total { get; private set; }
+    public bool Fechado { get; private set; }
 
-    public void AdicionarItem(ItemPedido item)
+    public void AdicionarItem(Item item)
     {
-        if (_itens.Any(i => i.Tipo == item.Tipo))
-            throw new DomainException($"Já existe um item do tipo {item.Tipo}");
+        if (Fechado)
+            throw new DomainException("Pedido já fechado");
 
-        _itens.Add(item);
+        if (_itens.Any(i => i.Tipo == item.Tipo))
+            throw new DomainException($"Já existe item do tipo {item.Tipo}");
+
+        _itens.Add(new ItemPedido(item));
     }
 
-    public void CalcularTotal()
+    public void FecharPedido()
     {
         if (!_itens.Any())
-            throw new DomainException("Pedido deve ter ao menos um item");
+            throw new DomainException("Pedido deve ter itens");
 
-        var subtotal = _itens.Sum(i => i.Preco);
-        var desconto = CalcularDesconto();
+        if (!_itens.Any(i => i.Tipo == TipoItem.Sanduiche))
+            throw new DomainException("Pedido deve ter ao menos um sanduíche");
 
-        Total = subtotal - desconto;
+        Subtotal = _itens.Sum(i => i.Preco);
+
+        PercentualDesconto = CalcularPercentualDesconto();
+
+        Desconto = Subtotal * PercentualDesconto;
+
+        Total = Subtotal - Desconto;
+
+        Fechado = true;
     }
-
-    private decimal CalcularDesconto()
+    private decimal CalcularPercentualDesconto()
     {
         var temSanduiche = _itens.Any(i => i.Tipo == TipoItem.Sanduiche);
         var temBatata = _itens.Any(i => i.Tipo == TipoItem.Batata);
         var temRefri = _itens.Any(i => i.Tipo == TipoItem.Refrigerante);
 
         if (temSanduiche && temBatata && temRefri)
-            return _itens.Sum(i => i.Preco) * 0.20m;
+            return 0.20m;
 
         if (temSanduiche && temRefri)
-            return _itens.Sum(i => i.Preco) * 0.15m;
+            return 0.15m;
 
         if (temSanduiche && temBatata)
-            return _itens.Sum(i => i.Preco) * 0.10m;
+            return 0.10m;
 
         return 0;
     }
+
 }

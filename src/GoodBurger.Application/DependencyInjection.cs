@@ -1,0 +1,23 @@
+﻿
+
+using FluentValidation;
+using GoodBurger.Application.Cardapio.Queries.GetAllItems;
+using GoodBurger.Application.Pedidos.Commands.CreatePedido;
+using GoodBurger.Application.Pedidos.Queries.GetAllPedidos;
+using GoodBurger.Application.Pedidos.Queries.GetPedidoById;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace GoodBurger.Application;
+
+public static class DependencyInjection
+{
+    public static IServiceCollection AddApplication(this IServiceCollection services)
+    {
+        services.AddScoped<CreatePedidoHandler>();
+        services.AddScoped<GetPedidoByIdHandler>();
+        services.AddScoped<GetAllItemsHandler>();
+        services.AddScoped<GetAllPedidosHandler>();
+        services.AddValidatorsFromAssemblyContaining<CreatePedidoValidator>();
+        return services;
+    }
+}
