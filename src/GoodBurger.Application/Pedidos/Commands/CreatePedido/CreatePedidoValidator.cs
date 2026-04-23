@@ -1,9 +1,6 @@
 ﻿using FluentValidation;
 namespace GoodBurger.Application.Pedidos.Commands.CreatePedido;
-
-
-
-public class CreatePedidoValidator : AbstractValidator<CreatePedidoCommand>
+public sealed class CreatePedidoValidator : AbstractValidator<CreatePedidoCommand>
 {
     public CreatePedidoValidator()
     {

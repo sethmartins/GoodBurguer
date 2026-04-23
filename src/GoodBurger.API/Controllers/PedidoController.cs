@@ -1,10 +1,14 @@
-﻿using GoodBurger.API.Contracts.Requests;
-using GoodBurger.API.Contracts.Responses;
+﻿
 using GoodBurger.Application.Abstractions;
+using GoodBurger.Application.Contracts.Requests;
+using GoodBurger.Application.Contracts.Responses;
 using GoodBurger.Application.Pedidos.Commands.CreatePedido;
+using GoodBurger.Application.Pedidos.Commands.DeletePedido;
+using GoodBurger.Application.Pedidos.Commands.UpdatePedido;
 using GoodBurger.Application.Pedidos.DTOs;
 using GoodBurger.Application.Pedidos.Queries.GetAllPedidos;
 using GoodBurger.Application.Pedidos.Queries.GetPedidoById;
+using GoodBurger.Domain.Models;
 using GoodBurger.Domain.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata;
@@ -19,14 +23,22 @@ public sealed class PedidoController : ControllerBase
     private readonly CreatePedidoHandler _create;
     private readonly GetPedidoByIdHandler _get;
     private readonly GetAllPedidosHandler _getAllHandler;
+    private readonly UpdatePedidoHandler _updateHandler;
+    private readonly DeletePedidoHandler _deleteHandler;
+
+
     public PedidoController(
         CreatePedidoHandler create,
         GetPedidoByIdHandler get,
-        GetAllPedidosHandler getAllHandler)
+        GetAllPedidosHandler getAllHandler,
+        UpdatePedidoHandler updateHandler,
+        DeletePedidoHandler deleteHandler)
     {
         _create = create;
         _get = get;
         _getAllHandler = getAllHandler;
+        _updateHandler = updateHandler;
+        _deleteHandler = deleteHandler;
     }
 
     [HttpPost]
@@ -35,9 +47,17 @@ public sealed class PedidoController : ControllerBase
     {
         var command = new CreatePedidoCommand(request.ItemIds);
 
-        var id = await _create.Handle(command);
+        var pedido = await _create.Handle(command);
 
-        return Ok(id);
+        return Ok(new PedidoResponse(
+                pedido.Id,
+                pedido.Subtotal,
+                pedido.Desconto,
+                pedido.PercentualDesconto * 100,
+                pedido.Total,
+                pedido.Itens.Select(i =>
+                    new ItemResponse(i.Id,i.Nome, i.Preco, i.Tipo)).ToList()
+));
     }
 
     [HttpGet("{id}")]
@@ -76,5 +96,21 @@ public sealed class PedidoController : ControllerBase
         ));
 
         return Ok(response);
+    }
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(Guid id, UpdatePedidoRequest request)
+    {
+        var command = new UpdatePedidoCommand(id, request.ItemIds);
+
+        var response = await _updateHandler.Handle(command);
+
+        return Ok(response);
+    }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        await _deleteHandler.Handle(new DeletePedidoCommand(id));
+
+        return NoContent();
     }
 }

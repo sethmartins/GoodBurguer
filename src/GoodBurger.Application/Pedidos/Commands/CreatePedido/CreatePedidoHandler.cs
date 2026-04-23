@@ -1,7 +1,7 @@
-﻿using FluentValidation;
-using GoodBurger.Application.Abstractions;
+﻿using GoodBurger.Application.Abstractions;
+using GoodBurger.Application.Contracts.Responses;
+using GoodBurger.Domain.Exceptions;
 using GoodBurger.Domain.Models;
-using GoodBurger.Domain.ValueObjects;
 
 namespace GoodBurger.Application.Pedidos.Commands.CreatePedido;
 
@@ -18,24 +18,30 @@ public sealed class CreatePedidoHandler
         _itemRepo = itemRepo;
     }
 
-    public async Task<Guid> Handle(CreatePedidoCommand command)
+    public async Task<PedidoResponse> Handle(CreatePedidoCommand command)
     {
+        var items = await _itemRepo.GetByIdsAsync(command.ItemIds);
+
+        if (items.Count != command.ItemIds.Count)
+            throw new DomainException("Um ou mais itens não foram encontrados");
+
         var pedido = new Pedido();
 
-        foreach (var itemId in command.ItemIds)
-        {
-            var item = await _itemRepo.GetByIdAsync(itemId);
-
-            if (item is null)
-                throw new Exception($"Item {itemId} não encontrado");
-
+        foreach (var item in items)
             pedido.AdicionarItem(item);
-        }
 
         pedido.FecharPedido();
 
         await _pedidoRepo.AddAsync(pedido);
 
-        return pedido.Id;
+        return new PedidoResponse(
+            pedido.Id,
+            pedido.Subtotal,
+            pedido.Desconto,
+            pedido.PercentualDesconto,
+            pedido.Total,
+            pedido.Itens.Select(i =>
+                new ItemResponse(i.ItemId,i.Nome, i.Preco, i.Tipo)).ToList()
+        );
     }
 }

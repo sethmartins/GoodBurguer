@@ -18,15 +18,24 @@ public sealed class Pedido
 
     public void AdicionarItem(Item item)
     {
-        if (Fechado)
-            throw new DomainException("Pedido já fechado");
+        //if (Fechado)
+        //    throw new DomainException("Pedido já fechado");
 
         if (_itens.Any(i => i.Tipo == item.Tipo))
             throw new DomainException($"Já existe item do tipo {item.Tipo}");
 
         _itens.Add(new ItemPedido(item));
     }
+    public void AtualizarItens(List<Item> items)
+    {
+        //if (Fechado)
+        //    throw new DomainException("Não é possível alterar um pedido fechado");
 
+        _itens.Clear();
+
+        foreach (var item in items)
+            AdicionarItem(item);
+    }
     public void FecharPedido()
     {
         if (!_itens.Any())

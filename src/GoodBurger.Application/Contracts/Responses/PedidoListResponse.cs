@@ -1,4 +1,4 @@
-﻿namespace GoodBurger.API.Contracts.Responses;
+﻿namespace GoodBurger.Application.Contracts.Responses;
 
 public record PedidoListResponse(
     Guid Id,

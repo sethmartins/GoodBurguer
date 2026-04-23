@@ -3,7 +3,7 @@ using GoodBurger.Domain.Models;
 
 namespace GoodBurger.Application.Cardapio.Queries.GetAllItems;
 
-public class GetAllItemsHandler
+public sealed class GetAllItemsHandler
 {
     private readonly IItemRepository _repo;
 

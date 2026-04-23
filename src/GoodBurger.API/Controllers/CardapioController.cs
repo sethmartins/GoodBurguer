@@ -1,4 +1,5 @@
 ﻿using GoodBurger.Application.Cardapio.Queries.GetAllItems;
+using GoodBurger.Application.Contracts.Responses;
 using GoodBurger.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,4 +34,3 @@ public class CardapioController : ControllerBase
     }
 }
 
-public record ItemResponse(int Id, string Nome, decimal Preco, TipoItem Tipo);

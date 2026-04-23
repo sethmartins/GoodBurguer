@@ -3,4 +3,7 @@
   <Project Path="src/GoodBurger.Application/GoodBurger.Application.csproj" Id="2c293873-468b-4991-81b6-0b5889b243cc" />
   <Project Path="src/GoodBurger.Domain/GoodBurger.Domain.csproj" />
   <Project Path="src/GoodBurger.Infrastructure/GoodBurger.Infrastructure.csproj" Id="5ebcdc22-0578-4b8d-8ffa-87faa4bcd197" />
+  <Project Path="tests/GoodBurger.FunctionalTests/GoodBurger.FunctionalTests.csproj" Id="387f2439-3f43-4eea-bac4-9c9cd9af6991" />
+  <Project Path="tests/GoodBurger.IntegrationTests/GoodBurger.IntegrationTests.csproj" Id="5af57fec-0eb5-4001-99cb-c1ccd66c734c" />
+  <Project Path="tests/GoodBurger.UnitTests/GoodBurger.UnitTests.csproj" Id="fa9a9948-dc8a-42a6-b9f7-0582a4c5a112" />
 </Solution>

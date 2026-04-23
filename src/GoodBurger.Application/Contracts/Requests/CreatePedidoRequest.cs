@@ -1,7 +1,7 @@
 ﻿using GoodBurger.Application.Pedidos.DTOs;
 using GoodBurger.Domain.Enums;
 
-namespace GoodBurger.API.Contracts.Requests;
+namespace GoodBurger.Application.Contracts.Requests;
 
 public record CreatePedidoRequest
 {

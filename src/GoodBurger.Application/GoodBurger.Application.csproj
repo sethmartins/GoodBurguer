@@ -15,8 +15,4 @@
     <ProjectReference Include="..\GoodBurger.Domain\GoodBurger.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pedidos\NovaPasta\" />
-  </ItemGroup>
-
 </Project>

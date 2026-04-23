@@ -1,6 +1,4 @@
-﻿
-
-using GoodBurger.Application.Abstractions;
+﻿using GoodBurger.Application.Abstractions;
 using GoodBurger.Domain.Models;
 
 namespace GoodBurger.Application.Pedidos.Queries.GetAllPedidos;
