@@ -1,0 +1,23 @@
+﻿@page "/criar"
+@using GoodBurger.Application.Contracts.Responses
+@using GoodBurger.Web.Services
+
+@inject PedidoService Service
+
+<h3>Criar Pedido</h3>
+
+<button @onclick="Criar">Criar Combo</button>
+
+@if (pedido != null)
+{
+    <p>Pedido criado: @pedido.Id</p>
+}
+
+@code {
+    private PedidoResponse pedido;
+
+    private async Task Criar()
+    {
+        pedido = await Service.Create(new List<int> { 1, 2, 3 });
+    }
+}

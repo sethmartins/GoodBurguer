@@ -1,0 +1,73 @@
+﻿@page "/pedidos/{Id:guid}"
+@using GoodBurger.Application.Contracts.Responses
+@using GoodBurger.Web.Services
+@rendermode InteractiveServer
+
+@inject PedidoService PedidoService
+@inject ItemService ItemService
+@inject NavigationManager Nav
+
+<h3>Editar Pedido</h3>
+
+@if (!string.IsNullOrEmpty(erro))
+{
+    <p style="color:red">@erro</p>
+}
+
+@if (itens == null)
+{
+    <p>Carregando...</p>
+}
+else
+{
+    @foreach (var item in itens)
+    {
+        <div>
+            <input type="checkbox"
+                   checked="@selecionados.Contains(item.Id)"
+                   @onchange="(e) => Toggle(item.Id, e.Value)" />
+
+            @item.Nome - @item.Preco
+        </div>
+    }
+
+    <button @onclick="Salvar">Salvar</button>
+}
+
+@code {
+    [Parameter] public Guid Id { get; set; }
+
+    private List<ItemResponse> itens;
+    private List<int> selecionados = new();
+    private string erro;
+
+    protected override async Task OnInitializedAsync()
+    {
+        itens = await ItemService.GetAll();
+
+        var pedido = await PedidoService.GetById(Id);
+        selecionados = pedido.Itens.Select(i => i.Id).ToList();
+    }
+
+    private void Toggle(int id, object value)
+    {
+        if ((bool)value)
+            selecionados.Add(id);
+        else
+            selecionados.Remove(id);
+    }
+
+    private async Task Salvar()
+    {
+        try
+        {
+            await PedidoService.Update(Id, selecionados);
+
+            Nav.NavigateTo("/pedidos");
+        }
+        catch (Exception ex)
+        {
+            erro = ex.Message;
+        }
+    }
+}

@@ -18,9 +18,7 @@ public sealed class Pedido
 
     public void AdicionarItem(Item item)
     {
-        //if (Fechado)
-        //    throw new DomainException("Pedido já fechado");
-
+        
         if (_itens.Any(i => i.Tipo == item.Tipo))
             throw new DomainException($"Já existe item do tipo {item.Tipo}");
 

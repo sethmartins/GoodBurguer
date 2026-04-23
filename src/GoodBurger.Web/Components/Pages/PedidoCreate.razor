@@ -1,0 +1,66 @@
+﻿@page "/pedidos/novo"
+@using GoodBurger.Application.Contracts.Responses
+@using GoodBurger.Web.Services
+@rendermode InteractiveServer
+
+@inject PedidoService PedidoService
+@inject ItemService ItemService
+@inject NavigationManager Nav
+
+<h3>Novo Pedido</h3>
+
+@if (!string.IsNullOrEmpty(erro))
+{
+    <p style="color:red">@erro</p>
+}
+
+@if (itens == null)
+{
+    <p>Carregando...</p>
+}
+else
+{
+    @foreach (var item in itens)
+    {
+        <div>
+            <input type="checkbox"
+                   @onchange="(e) => Toggle(item.Id, e.Value)" />
+            @item.Nome - @item.Preco
+        </div>
+    }
+
+    <button @onclick="Salvar">Confirmar Pedido</button>
+}
+
+@code {
+    private List<ItemResponse> itens;
+    private List<int> selecionados = new();
+    private string erro;
+
+    protected override async Task OnInitializedAsync()
+    {
+        itens = await ItemService.GetAll();
+    }
+
+    private void Toggle(int id, object value)
+    {
+        if ((bool)value)
+            selecionados.Add(id);
+        else
+            selecionados.Remove(id);
+    }
+
+    private async Task Salvar()
+    {
+        try
+        {
+            await PedidoService.Create(selecionados);
+
+            Nav.NavigateTo("/pedidos"); // 🔥 REDIRECIONA
+        }
+        catch (Exception ex)
+        {
+            erro = ex.Message;
+        }
+    }
+}

@@ -1,0 +1,68 @@
+﻿@page "/"
+@page "/pedidos"
+@using GoodBurger.Application.Contracts.Responses
+@using GoodBurger.Web.Services
+@rendermode InteractiveServer
+
+@inject PedidoService Service
+@inject NavigationManager Nav
+
+<h3>Pedidos</h3>
+@{
+    string NovoLink = "/pedidos/novo";
+}
+
+
+<button @onclick="() => Nav.NavigateTo(NovoLink)">
+    Fazer Pedido
+</button>
+
+@if (pedidos == null)
+{
+    <p>Carregando...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Total</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in pedidos)
+            {
+                <tr>
+                    <td>@p.Id</td>
+                    <td>@p.Total</td>
+                    <td>
+                        <button @onclick="() => Editar(p.Id)">Editar</button>
+                        <button @onclick="() => Deletar(p.Id)">Excluir</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<PedidoResponse> pedidos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        pedidos = await Service.GetAll();
+    }
+
+    private void Editar(Guid id)
+    {
+        Nav.NavigateTo($"/pedidos/{id}");
+    }
+
+    private async Task Deletar(Guid id)
+    {
+        await Service.Delete(id);
+        pedidos = await Service.GetAll();
+    }
+}
