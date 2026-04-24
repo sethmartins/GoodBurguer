@@ -10,12 +10,7 @@ namespace GoodBurger.API.Controllers;
 [Route("api/[controller]")]
 public class CardapioController(IMediator mediator) : ControllerBase
 {
-    //private readonly GetAllItemsHandler _handler;
-
-    //public CardapioController(GetAllItemsHandler handler)
-    //{
-    //    _handler = handler;
-    //}
+   
 
     /// <summary>
     /// Lista todos os itens do cardápio
