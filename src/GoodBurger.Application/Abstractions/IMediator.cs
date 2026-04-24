@@ -25,11 +25,7 @@ public interface IMediator
 }
 
 
-public interface ICreatePedidoHandler : IMediator
-{
-    public Task<PedidoResponse> HandleCreatePedido(CreatePedidoCommand command);
 
-}
 public interface ICommand 
 {
     
