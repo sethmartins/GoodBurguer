@@ -22,16 +22,21 @@ else
 {
     @foreach (var item in itens)
     {
-        <div>
-            <input type="checkbox"
+        <div class="form-check border rounded p-2 mb-2">
+            
+            <input class="form-check-input me-2" type="checkbox"
                    checked="@selecionados.Contains(item.Id)"
                    @onchange="(e) => Toggle(item.Id, e.Value)" />
 
-            @item.Nome - @item.Preco
+            <label class="form-check-label w-100" for="item_@item.Id">
+                <strong>@item.Nome</strong>
+                <span class="float-end">@item.Preco.ToString("C")</span>
+            </label>
         </div>
+     
     }
 
-    <button @onclick="Salvar">Salvar</button>
+    <button class="btn btn-primary mb-1" @onclick="Salvar">Salvar</button>
 }
 
 @code {

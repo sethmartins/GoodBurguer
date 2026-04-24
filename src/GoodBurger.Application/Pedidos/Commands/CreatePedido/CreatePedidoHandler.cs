@@ -41,7 +41,13 @@ public sealed class CreatePedidoHandler
             pedido.PercentualDesconto,
             pedido.Total,
             pedido.Itens.Select(i =>
-                new ItemResponse(i.ItemId,i.Nome, i.Preco, i.Tipo)).ToList()
-        );
+                new ItemResponse(
+                    i.ItemId,
+                    i.Nome, 
+                    i.Preco,
+                    i.Tipo)
+                ).ToList<ItemResponse>()
+                ?? new List<ItemResponse>() 
+        ) ;
     }
 }

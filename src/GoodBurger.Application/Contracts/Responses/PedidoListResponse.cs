@@ -6,5 +6,6 @@ public record PedidoListResponse(
     decimal Desconto,
     decimal PercentualDesconto,
     decimal Total,
-    int QuantidadeItens
+    int QuantidadeItens,
+    List<ItemResponse> Itens
 );

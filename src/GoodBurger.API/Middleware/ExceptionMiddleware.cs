@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using GoodBurger.Application.Contracts.Responses;
 using GoodBurger.Domain.Exceptions;
 using System.Text.Json;
 
@@ -49,12 +50,8 @@ public sealed class ExceptionMiddleware
             .GroupBy(e => e.PropertyName)
             .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage));
 
-        await context.Response.WriteAsJsonAsync(new
-        {
-            type = "validation_error",
-            correlationId,
-            errors
-        });
+        await context.Response.WriteAsJsonAsync(new ErrorResponse(type: "validation_error", correlationId: correlationId, message: "Validation failed"));
+       
     }
 
     private async Task HandleDomain(HttpContext context, DomainException ex)
@@ -67,12 +64,7 @@ public sealed class ExceptionMiddleware
 
         context.Response.StatusCode = 400;
 
-        await context.Response.WriteAsJsonAsync(new
-        {
-            type = "domain_error",
-            correlationId,
-            message = ex.Message
-        });
+        await context.Response.WriteAsJsonAsync(new ErrorResponse(type: "domain_error", correlationId ,message: ex.Message));
     }
 
     private async Task HandleUnexpected(HttpContext context, Exception ex)
@@ -85,11 +77,6 @@ public sealed class ExceptionMiddleware
 
         context.Response.StatusCode = 500;
 
-        await context.Response.WriteAsJsonAsync(new
-        {
-            type = "internal_error",
-            correlationId,
-            message = "Erro interno"
-        });
+        await context.Response.WriteAsJsonAsync(new ErrorResponse(type: "internal_error", correlationId: correlationId, message: "Erro interno"));
     }
 }

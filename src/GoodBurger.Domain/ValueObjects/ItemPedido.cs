@@ -6,7 +6,12 @@ namespace GoodBurger.Domain.ValueObjects;
 
 public sealed class ItemPedido
 {
+    public int Id { get; private set; } // 👈 PK
+
+    public Guid PedidoId { get; private set; } // 👈 FK
+
     public int ItemId { get; private set; }
+
     public string Nome { get; private set; }
     public decimal Preco { get; private set; }
     public TipoItem Tipo { get; private set; }
@@ -26,5 +31,4 @@ public sealed class ItemPedido
         Preco = item.Preco;
         Tipo = item.Tipo;
     }
-   
 }

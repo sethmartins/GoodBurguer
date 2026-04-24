@@ -56,7 +56,8 @@ public sealed class PedidoController : ControllerBase
                 pedido.PercentualDesconto * 100,
                 pedido.Total,
                 pedido.Itens.Select(i =>
-                    new ItemResponse(i.Id,i.Nome, i.Preco, i.Tipo)).ToList()
+                    new ItemResponse(i.Id,i.Nome, i.Preco, i.Tipo)).ToList<ItemResponse>()
+                    ?? new List<ItemResponse>()
 ));
     }
 
@@ -92,8 +93,11 @@ public sealed class PedidoController : ControllerBase
             p.Desconto,
             p.PercentualDesconto * 100, // 👈 converte aqui
             p.Total,
-            p.Itens.Count
-        ));
+            p.Itens.Count,
+            p.Itens.Select(i =>
+                new ItemResponse(i.ItemId, i.Nome, i.Preco, i.Tipo)).ToList())
+        );
+        
 
         return Ok(response);
     }

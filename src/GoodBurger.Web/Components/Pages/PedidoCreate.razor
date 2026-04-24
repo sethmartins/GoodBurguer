@@ -22,14 +22,17 @@ else
 {
     @foreach (var item in itens)
     {
-        <div>
-            <input type="checkbox"
+        <div class="form-check border rounded p-2 mb-2">
+            <input class="form-check-input me-2" type="checkbox"
                    @onchange="(e) => Toggle(item.Id, e.Value)" />
-            @item.Nome - @item.Preco
+            <label class="form-check-label w-100" for="item_@item.Id">
+                <strong>@item.Nome</strong>
+                <span class="float-end">@item.Preco.ToString("C")</span>
+            </label>
         </div>
     }
 
-    <button @onclick="Salvar">Confirmar Pedido</button>
+    <button class="btn btn-primary mb-1" @onclick="Salvar">Confirmar Pedido</button>
 }
 
 @code {
@@ -56,7 +59,7 @@ else
         {
             await PedidoService.Create(selecionados);
 
-            Nav.NavigateTo("/pedidos"); // 🔥 REDIRECIONA
+            Nav.NavigateTo("/pedidos"); 
         }
         catch (Exception ex)
         {

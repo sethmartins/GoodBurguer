@@ -1,4 +1,5 @@
 ﻿using GoodBurger.Application.Abstractions;
+using GoodBurger.Application.Contracts.Responses;
 using GoodBurger.Domain.Models;
 using GoodBurger.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ public sealed class PedidoRepository(AppDbContext context) : IPedidoRepository
     public async Task<List<Pedido>> GetAllAsync()
     {
         return await context.Pedidos
-            .Include(p => p.Itens)
+            .Include(p => p.Itens)            
             .ToListAsync();
     }
 

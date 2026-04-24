@@ -13,7 +13,7 @@
 }
 
 
-<button @onclick="() => Nav.NavigateTo(NovoLink)">
+<button class="btn btn-primary mb-3" @onclick="() => Nav.NavigateTo(NovoLink)">
     Fazer Pedido
 </button>
 
@@ -23,10 +23,14 @@
 }
 else
 {
-    <table class="table">
+    <table class="table table-striped table-hover">
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Itens</th>
+                <th>SubTotal</th>
+                <th>Desconto</th>
+                <th>% Desc</th>
                 <th>Total</th>
                 <th>Ações</th>
             </tr>
@@ -36,10 +40,18 @@ else
             {
                 <tr>
                     <td>@p.Id</td>
-                    <td>@p.Total</td>
                     <td>
-                        <button @onclick="() => Editar(p.Id)">Editar</button>
-                        <button @onclick="() => Deletar(p.Id)">Excluir</button>
+                        @string.Join(", ", p.Itens.Select(i => i.Nome))
+                    </td>
+                    <td>@p.Subtotal.ToString("C")</td>
+                    <td>@p.Desconto.ToString("C")</td>
+                    <span class="badge bg-success">
+                        @p.PercentualDesconto.ToString("F0")%
+                    </span>
+                    <td>@p.Total.ToString("C")</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm me-2" @onclick="() => Editar(p.Id)">Editar</button>
+                        <button class="btn btn-danger btn-sm" @onclick="() => Deletar(p.Id)">Excluir</button>
                     </td>
                 </tr>
             }

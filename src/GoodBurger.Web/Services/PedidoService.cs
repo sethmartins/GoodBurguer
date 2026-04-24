@@ -20,7 +20,13 @@ public sealed class PedidoService
     public async Task<PedidoResponse> Create(List<int> itemIds)
     {
         var response = await _http.PostAsJsonAsync("/api/Pedido", new { itemIds });
-      
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var error = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+            throw new Exception(error?.Message ?? "Erro ao criar pedido");
+        }
+
         return await response.Content.ReadFromJsonAsync<PedidoResponse>();
     }
 
