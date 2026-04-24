@@ -7,9 +7,7 @@ using GoodBurger.Application.Pedidos.Commands.UpdatePedido;
 using GoodBurger.Application.Pedidos.Queries.GetAllPedidos;
 using GoodBurger.Application.Pedidos.Queries.GetPedidoById;
 using GoodBurger.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace GoodBurger.Application.Utils;
 
@@ -42,27 +40,6 @@ public class Mediator : IMediator
     {
         
     }
-//    //public Task<IResponse?> Handle(object? commandOrQuery,TypeCQRS type)
-//    {
-        
-//        switch (type)
-//        {
-//            case TypeCQRS.CreatePedidoHandler:
-//                return _create.HandleCreatePedido((CreatePedidoCommand)commandOrQuery!);
-//            case TypeCQRS.GetPedidoByIdHandler:
-//                return _get.HandleGetPedidoById((GetPedidoByIdQuery)commandOrQuery!);
-//            case TypeCQRS.GetAllPedidosHandler:
-//                return _getAllHandler.HandleGetAllPedidos((GetAllPedidosQuery)commandOrQuery!);
-//            case TypeCQRS.UpdatePedidoHandler:
-//                return _updateHandler.HandleUpdatePedido((UpdatePedidoCommand)commandOrQuery!);
-//            case TypeCQRS.DeletePedidoHandler:
-//                return _deleteHandler.HandleDeletePedido((DeletePedidoCommand)commandOrQuery!);
-//            case TypeCQRS.GetAllItemsHandler:
-//                return _handler.HandleGetAllItems((GetAllItemsQuery)commandOrQuery!);
-//            default:
-//                throw new InvalidOperationException("Tipo de comando ou consulta desconhecido.");
-//    }
-//}
 
     public Task<PedidoResponse> HandleCreatePedido(CreatePedidoCommand command)
     {
