@@ -1,4 +1,4 @@
 ﻿
 namespace GoodBurger.Application.Pedidos.Commands.UpdatePedido;
 
-public record UpdatePedidoCommand(Guid Id, List<int> ItemIds);
+public record UpdatePedidoCommand(Guid Id, IEnumerable<int> ItemIds);

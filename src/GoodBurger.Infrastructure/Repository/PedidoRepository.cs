@@ -17,7 +17,7 @@ public sealed class PedidoRepository(AppDbContext context) : IPedidoRepository
 
     public async Task<Pedido?> GetByIdAsync(Guid id) 
         => await context.Pedidos.FindAsync(id);
-    public async Task<List<Pedido>> GetAllAsync()
+    public async Task<IEnumerable<Pedido>> GetAllAsync()
     {
         return await context.Pedidos
             .Include(p => p.Itens)            

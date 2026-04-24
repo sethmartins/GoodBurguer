@@ -6,7 +6,7 @@ public interface IPedidoRepository
 {
     Task AddAsync(Pedido pedido);
     Task<Pedido?> GetByIdAsync(Guid id);
-    Task<List<Pedido>> GetAllAsync();
+    Task<IEnumerable<Pedido>> GetAllAsync();
     Task UpdateAsync(Pedido pedido);
     Task DeleteAsync(Pedido pedido);
 }

@@ -1,5 +1,7 @@
 ﻿
 
+using GoodBurger.Application.Abstractions;
+
 namespace GoodBurger.Application.Contracts.Responses;
 
 public record PedidoResponse(
@@ -9,4 +11,4 @@ public record PedidoResponse(
     decimal PercentualDesconto,
     decimal Total,
     List<ItemResponse> Itens
-);
+):IResponse;

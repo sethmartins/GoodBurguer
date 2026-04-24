@@ -1,4 +1,6 @@
-﻿namespace GoodBurger.Application.Contracts.Responses;
+﻿using GoodBurger.Application.Abstractions;
+
+namespace GoodBurger.Application.Contracts.Responses;
 
 public record PedidoListResponse(
     Guid Id,
@@ -8,4 +10,4 @@ public record PedidoListResponse(
     decimal Total,
     int QuantidadeItens,
     List<ItemResponse> Itens
-);
+):IResponse;

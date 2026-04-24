@@ -16,7 +16,7 @@ public sealed class UpdatePedidoHandler
         _itemRepo = itemRepo;
     }
 
-    public async Task<PedidoResponse> Handle(UpdatePedidoCommand command)
+    public async Task<PedidoResponse> HandleUpdatePedido(UpdatePedidoCommand command)
     {
         var pedido = await _pedidoRepo.GetByIdAsync(command.Id);
 
@@ -25,10 +25,10 @@ public sealed class UpdatePedidoHandler
 
         var items = await _itemRepo.GetByIdsAsync(command.ItemIds);
 
-        if (items.Count != command.ItemIds.Count)
+        if (items.Count() != command.ItemIds.Count())
             throw new DomainException("Um ou mais itens não foram encontrados");
 
-        pedido.AtualizarItens(items); // 👈 método novo
+        pedido.AtualizarItens(items); 
 
         pedido.FecharPedido();
 

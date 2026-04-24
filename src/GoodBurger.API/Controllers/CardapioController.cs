@@ -1,4 +1,5 @@
-﻿using GoodBurger.Application.Cardapio.Queries.GetAllItems;
+﻿using GoodBurger.Application.Abstractions;
+using GoodBurger.Application.Cardapio.Queries.GetAllItems;
 using GoodBurger.Application.Contracts.Responses;
 using GoodBurger.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -7,14 +8,14 @@ namespace GoodBurger.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CardapioController : ControllerBase
+public class CardapioController(IMediator mediator) : ControllerBase
 {
-    private readonly GetAllItemsHandler _handler;
+    //private readonly GetAllItemsHandler _handler;
 
-    public CardapioController(GetAllItemsHandler handler)
-    {
-        _handler = handler;
-    }
+    //public CardapioController(GetAllItemsHandler handler)
+    //{
+    //    _handler = handler;
+    //}
 
     /// <summary>
     /// Lista todos os itens do cardápio
@@ -22,7 +23,7 @@ public class CardapioController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var items = await _handler.Handle(new GetAllItemsQuery());
+        var items = await mediator.HandleGetAllItems(new GetAllItemsQuery());
 
         var response = items
             .Select(i => new ItemResponse(

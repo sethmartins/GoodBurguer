@@ -3,7 +3,7 @@ using GoodBurger.Domain.Models;
 
 namespace GoodBurger.Application.Pedidos.Queries.GetAllPedidos;
 
-public class GetAllPedidosHandler
+public class GetAllPedidosHandler 
 {
     private readonly IPedidoRepository _repo;
 
@@ -12,7 +12,7 @@ public class GetAllPedidosHandler
         _repo = repo;
     }
 
-    public async Task<List<Pedido>> Handle(GetAllPedidosQuery query)
+    public async Task<IEnumerable<Pedido>> HandleGetAllPedidos(GetAllPedidosQuery query)
     {
         return await _repo.GetAllAsync();
     }

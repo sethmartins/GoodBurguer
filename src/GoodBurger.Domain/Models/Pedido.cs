@@ -24,11 +24,9 @@ public sealed class Pedido
 
         _itens.Add(new ItemPedido(item));
     }
-    public void AtualizarItens(List<Item> items)
+    public void AtualizarItens(IEnumerable<Item> items)
     {
-        //if (Fechado)
-        //    throw new DomainException("Não é possível alterar um pedido fechado");
-
+        
         _itens.Clear();
 
         foreach (var item in items)

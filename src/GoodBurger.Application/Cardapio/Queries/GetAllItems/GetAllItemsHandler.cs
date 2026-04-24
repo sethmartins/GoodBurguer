@@ -12,7 +12,7 @@ public sealed class GetAllItemsHandler
         _repo = repo;
     }
 
-    public async Task<List<Item>> Handle(GetAllItemsQuery query)
+    public async Task<IEnumerable<Item>> HandleGetAllItems(GetAllItemsQuery query)
     {
         return await _repo.GetAllAsync();
     }

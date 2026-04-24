@@ -5,7 +5,7 @@ using GoodBurger.Domain.Models;
 
 namespace GoodBurger.Application.Pedidos.Commands.CreatePedido;
 
-public sealed class CreatePedidoHandler
+public sealed class CreatePedidoHandler 
 {
     private readonly IPedidoRepository _pedidoRepo;
     private readonly IItemRepository _itemRepo;
@@ -18,11 +18,11 @@ public sealed class CreatePedidoHandler
         _itemRepo = itemRepo;
     }
 
-    public async Task<PedidoResponse> Handle(CreatePedidoCommand command)
+    public async Task<PedidoResponse> HandleCreatePedido(CreatePedidoCommand command)
     {
         var items = await _itemRepo.GetByIdsAsync(command.ItemIds);
 
-        if (items.Count != command.ItemIds.Count)
+        if (items.Count() != command.ItemIds.Count())
             throw new DomainException("Um ou mais itens não foram encontrados");
 
         var pedido = new Pedido();

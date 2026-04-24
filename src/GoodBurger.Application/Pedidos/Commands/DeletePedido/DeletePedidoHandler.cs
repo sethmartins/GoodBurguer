@@ -12,7 +12,7 @@ public class DeletePedidoHandler
         _repo = repo;
     }
 
-    public async Task Handle(DeletePedidoCommand command)
+    public async Task HandleDeletePedido(DeletePedidoCommand command)
     {
         var pedido = await _repo.GetByIdAsync(command.Id);
 

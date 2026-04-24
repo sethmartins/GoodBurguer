@@ -11,7 +11,7 @@ public sealed class GetPedidoByIdHandler
         _repo = repo;
     }
 
-    public async Task<Pedido?> Handle(GetPedidoByIdQuery query)
+    public async Task<Pedido?> HandleGetPedidoById(GetPedidoByIdQuery query)
     {
         return await _repo.GetByIdAsync(query.Id);
     }

@@ -18,28 +18,9 @@ namespace GoodBurger.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 
-public sealed class PedidoController : ControllerBase
+public sealed class PedidoController(IMediator mediator) : ControllerBase
 {
-    private readonly CreatePedidoHandler _create;
-    private readonly GetPedidoByIdHandler _get;
-    private readonly GetAllPedidosHandler _getAllHandler;
-    private readonly UpdatePedidoHandler _updateHandler;
-    private readonly DeletePedidoHandler _deleteHandler;
-
-
-    public PedidoController(
-        CreatePedidoHandler create,
-        GetPedidoByIdHandler get,
-        GetAllPedidosHandler getAllHandler,
-        UpdatePedidoHandler updateHandler,
-        DeletePedidoHandler deleteHandler)
-    {
-        _create = create;
-        _get = get;
-        _getAllHandler = getAllHandler;
-        _updateHandler = updateHandler;
-        _deleteHandler = deleteHandler;
-    }
+  
 
     [HttpPost]
    
@@ -47,7 +28,7 @@ public sealed class PedidoController : ControllerBase
     {
         var command = new CreatePedidoCommand(request.ItemIds);
 
-        var pedido = await _create.Handle(command);
+        var pedido = await mediator.HandleCreatePedido(command);
 
         return Ok(new PedidoResponse(
                 pedido.Id,
@@ -64,7 +45,7 @@ public sealed class PedidoController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var pedido = await _get.Handle(new GetPedidoByIdQuery(id));
+        var pedido = await mediator.HandleGetPedidoById(new GetPedidoByIdQuery(id));
 
         if (pedido is null)
             return NotFound();
@@ -85,7 +66,7 @@ public sealed class PedidoController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var pedidos = await _getAllHandler.Handle(new GetAllPedidosQuery());
+        var pedidos = await mediator.HandleGetAllPedidos(new GetAllPedidosQuery());
 
         var response = pedidos.Select(p => new PedidoListResponse(
             p.Id,
@@ -106,14 +87,14 @@ public sealed class PedidoController : ControllerBase
     {
         var command = new UpdatePedidoCommand(id, request.ItemIds);
 
-        var response = await _updateHandler.Handle(command);
+        var response = await mediator.HandleUpdatePedido(command);
 
         return Ok(response);
     }
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        await _deleteHandler.Handle(new DeletePedidoCommand(id));
+        await mediator.HandleDeletePedido(new DeletePedidoCommand(id));
 
         return NoContent();
     }
