@@ -72,7 +72,7 @@ public sealed class PedidoController(IMediator mediator) : ControllerBase
             p.Id,
             p.Subtotal,
             p.Desconto,
-            p.PercentualDesconto * 100, // 👈 converte aqui
+            p.PercentualDesconto * 100, 
             p.Total,
             p.Itens.Count,
             p.Itens.Select(i =>
