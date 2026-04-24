@@ -99,53 +99,56 @@ Acesse:
 https://localhost:7033
 ```
 📡 Endpoints principais
-📋 Pedidos
+### 📋 Pedidos
 GET /api/pedido → lista todos os pedidos
 GET /api/pedido/{id} → busca por ID
 POST /api/pedido → cria pedido
 PUT /api/pedido/{id} → atualiza pedido
 DELETE /api/pedido/{id} → remove pedido
 
-🍟 Cardápio
+### 🍟 Cardápio
 GET /api/cardapio → lista itens disponíveis
 
-🧪 Testes
+### 🧪 Testes
 Rodar testes:
 ```
 dotnet test
 ```
-Inclui:
+### Inclui:
 
-Testes unitários de domínio
-Testes de integração da API
-Testes BDD com Reqnroll
+###### Testes unitários de domínio
+###### Testes de integração da API
+###### Testes BDD com Reqnroll
 
-💡 Decisões técnicas
+### 💡 Decisões técnicas
 
-✔ Uso de Owned Entity (ItemPedido)
+#### ✔ Uso de Owned Entity (ItemPedido)
 
-O ItemPedido foi modelado como Owned Entity dentro de Pedido, pois:
+###### O ItemPedido foi modelado como Owned Entity dentro de Pedido, pois:
 
-Representa um snapshot do item no momento do pedido
-Não possui identidade fora do agregado
-Evita inconsistência com alterações futuras no catálogo
-✔ Separação Item vs ItemPedido
-Item → catálogo
-ItemPedido → dados congelados no pedido
-✔ Regras no domínio
+###### Representa um snapshot do item no momento do pedido
+###### Não possui identidade fora do agregado
+###### Evita inconsistência com alterações futuras no catálogo
 
-Toda lógica de negócio está dentro da entidade Pedido, garantindo:
+####  ✔ Separação Item vs ItemPedido
+###### vItem → catálogo
+###### ItemPedido → dados congelados no pedido
 
-Alta coesão
-Facilidade de teste
-Independência de infraestrutura
-⚠️ Melhorias futuras
-Autenticação e autorização
-Paginação e filtros na listagem
-Cache de consultas
-Deploy em nuvem (Azure / AWS)
-UI mais rica (ex: MudBlazor)
+#### ✔ Regras no domínio
 
-👨‍💻 Autor
+##### Toda lógica de negócio está dentro da entidade Pedido, garantindo:
+###### Alta coesão
+###### Facilidade de teste
+###### Independência de infraestrutura
 
-Desenvolvido por Seth Martins
+### ⚠️ Melhorias futuras
+
+#### Autenticação e autorização
+#### Paginação e filtros na listagem
+#### Cache de consultas
+#### Deploy em nuvem (Azure / AWS)
+#### UI mais rica (ex: MudBlazor)
+
+#### 👨‍💻 Autor
+
+#### Desenvolvido por Seth Martins
