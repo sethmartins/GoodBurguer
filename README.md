@@ -45,10 +45,15 @@ O projeto segue princípios de:
 
 ### Estrutura:
 src/
+
 ├── GoodBurger.API → Controllers, Middleware
+
 ├── GoodBurger.Application → Commands, Queries, Handlers
+
 ├── GoodBurger.Domain → Entidades e regras de negócio
+
 ├── GoodBurger.Infrastructure → EF Core, Repositórios
+
 └── GoodBurger.Web → Frontend em Blazor
 
 ---
@@ -80,18 +85,19 @@ src/
 ```bash
 cd src/GoodBurger.API
 dotnet run
-
+```
 A API estará disponível em:
-
+```
 https://localhost:7273
-
+```
+```
 cd src/GoodBurger.Web
 dotnet run
-
+```
 Acesse:
-
+```
 https://localhost:7033
-
+```
 📡 Endpoints principais
 📋 Pedidos
 GET /api/pedido → lista todos os pedidos
@@ -105,8 +111,9 @@ GET /api/cardapio → lista itens disponíveis
 
 🧪 Testes
 Rodar testes:
+```
 dotnet test
-
+```
 Inclui:
 
 Testes unitários de domínio
