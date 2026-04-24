@@ -1,9 +1,10 @@
 ﻿using GoodBurger.Application.Abstractions;
+using GoodBurger.Application.Abstractions.Pedidos;
 using GoodBurger.Domain.Models;
 
 namespace GoodBurger.Application.Pedidos.Queries.GetAllPedidos;
 
-public class GetAllPedidosHandler 
+public class GetAllPedidosHandler : IGetAllPedidosHandler
 {
     private readonly IPedidoRepository _repo;
 

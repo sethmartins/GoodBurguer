@@ -14,8 +14,7 @@ using System.Text;
 namespace GoodBurger.Application.Abstractions;
 
 public interface IMediator
-{
-    
+{    
     public Task<PedidoResponse> HandleCreatePedido(CreatePedidoCommand command);
     public Task HandleDeletePedido(DeletePedidoCommand command);
     public Task<PedidoResponse> HandleUpdatePedido(UpdatePedidoCommand command);

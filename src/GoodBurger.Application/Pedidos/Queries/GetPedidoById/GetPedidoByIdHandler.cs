@@ -1,8 +1,9 @@
 ﻿using GoodBurger.Application.Abstractions;
+using GoodBurger.Application.Abstractions.Pedidos;
 using GoodBurger.Domain.Models;
 
 namespace GoodBurger.Application.Pedidos.Queries.GetPedidoById;
-public sealed class GetPedidoByIdHandler
+public sealed class GetPedidoByIdHandler : IGetPedidoByIdHandler
 {
     private readonly IPedidoRepository _repo;
 

@@ -1,9 +1,10 @@
 ﻿using GoodBurger.Application.Abstractions;
+using GoodBurger.Application.Abstractions.Pedidos;
 using GoodBurger.Domain.Exceptions;
 
 namespace GoodBurger.Application.Pedidos.Commands.DeletePedido;
 
-public class DeletePedidoHandler
+public class DeletePedidoHandler : IDeletePedidoHandler
 {
     private readonly IPedidoRepository _repo;
 

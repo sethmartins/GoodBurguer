@@ -1,11 +1,12 @@
 ﻿using GoodBurger.Application.Abstractions;
+using GoodBurger.Application.Abstractions.Pedidos;
 using GoodBurger.Application.Contracts.Responses;
 using GoodBurger.Application.Pedidos.Mappings;
 using GoodBurger.Domain.Exceptions;
 
 namespace GoodBurger.Application.Pedidos.Commands.UpdatePedido;
 
-public sealed class UpdatePedidoHandler
+public sealed class UpdatePedidoHandler : IUpdatePedidoHandler
 {
     private readonly IPedidoRepository _pedidoRepo;
     private readonly IItemRepository _itemRepo;

@@ -1,11 +1,12 @@
 ﻿using GoodBurger.Application.Abstractions;
+using GoodBurger.Application.Abstractions.Pedidos;
 using GoodBurger.Application.Contracts.Responses;
 using GoodBurger.Domain.Exceptions;
 using GoodBurger.Domain.Models;
 
 namespace GoodBurger.Application.Pedidos.Commands.CreatePedido;
 
-public sealed class CreatePedidoHandler 
+public sealed class CreatePedidoHandler : ICreatePedidoHandler
 {
     private readonly IPedidoRepository _pedidoRepo;
     private readonly IItemRepository _itemRepo;

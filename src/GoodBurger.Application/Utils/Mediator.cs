@@ -1,4 +1,6 @@
 ﻿using GoodBurger.Application.Abstractions;
+using GoodBurger.Application.Abstractions.Cardapios;
+using GoodBurger.Application.Abstractions.Pedidos;
 using GoodBurger.Application.Cardapio.Queries.GetAllItems;
 using GoodBurger.Application.Contracts.Responses;
 using GoodBurger.Application.Pedidos.Commands.CreatePedido;
@@ -8,26 +10,25 @@ using GoodBurger.Application.Pedidos.Queries.GetAllPedidos;
 using GoodBurger.Application.Pedidos.Queries.GetPedidoById;
 using GoodBurger.Domain.Models;
 
-
 namespace GoodBurger.Application.Utils;
 
 public class Mediator : IMediator
 {
-    private readonly CreatePedidoHandler _create;
-    private readonly GetPedidoByIdHandler _get;
-    private readonly GetAllPedidosHandler _getAllHandler;
-    private readonly UpdatePedidoHandler _updateHandler;
-    private readonly DeletePedidoHandler _deleteHandler;
-    private readonly GetAllItemsHandler _handler;
+    private readonly ICreatePedidoHandler _create;
+    private readonly IGetPedidoByIdHandler _get;
+    private readonly IGetAllPedidosHandler _getAllHandler;
+    private readonly IUpdatePedidoHandler _updateHandler;
+    private readonly IDeletePedidoHandler _deleteHandler;
+    private readonly IGetAllItemsHandler _handler;
 
 
     public Mediator(
-        CreatePedidoHandler createPedidoHandler,
-        GetPedidoByIdHandler getPedidoByIdHandler,
-        GetAllPedidosHandler getAllPedidosHandler,
-        UpdatePedidoHandler updatePedidoHandler,
-        DeletePedidoHandler deletePedidoHandler,
-        GetAllItemsHandler getAllItemsHandler)
+        ICreatePedidoHandler createPedidoHandler,
+        IGetPedidoByIdHandler getPedidoByIdHandler,
+        IGetAllPedidosHandler getAllPedidosHandler,
+        IUpdatePedidoHandler updatePedidoHandler,
+        IDeletePedidoHandler deletePedidoHandler,
+        IGetAllItemsHandler getAllItemsHandler)
     {
         _create = createPedidoHandler;
         _get = getPedidoByIdHandler;
