@@ -1,4 +1,5 @@
 ﻿using GoodBurger.Application.Abstractions;
+using GoodBurger.Application.Contracts.Responses;
 using GoodBurger.Domain.Models;
 using GoodBurger.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -12,11 +13,19 @@ public sealed class ItemRepository(AppDbContext _ctx) : IItemRepository
 {
     public async Task<Item?> GetByIdAsync(int id) 
         => await _ctx.Items.FindAsync(id);
-    public async Task<IEnumerable<Item>> GetAllAsync()
-        =>  await _ctx.Items.AsNoTracking().ToListAsync();
-    public async Task<IEnumerable<Item>> GetByIdsAsync(IEnumerable<int> ids)
-        => await _ctx.Items.AsNoTracking()
-            .Where(i => ids.Contains(i.Id))
-            .ToListAsync<Item>();
+    public async Task<IEnumerable<Item?>> GetAllAsync()
+        =>  await _ctx
+                    .Items
+                    .AsNoTracking()
+                    .ToListAsync();
+    public async Task<IEnumerable<Item?>> GetByIdsAsync(IEnumerable<int> ids)
+            => await _ctx
+                        .Items
+                        .AsNoTracking()
+                        .Where(i => ids.Contains(i.Id))
+                        .ToListAsync();
+        
+    
+        
     
 }

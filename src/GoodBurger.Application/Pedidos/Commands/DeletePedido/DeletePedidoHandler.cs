@@ -1,10 +1,11 @@
 ﻿using GoodBurger.Application.Abstractions;
-using GoodBurger.Application.Abstractions.Pedidos;
+using GoodBurger.Domain.Abstractions;
+using GoodBurger.Domain.Abstractions.Errors;
 using GoodBurger.Domain.Exceptions;
 
 namespace GoodBurger.Application.Pedidos.Commands.DeletePedido;
 
-public class DeletePedidoHandler : IDeletePedidoHandler
+public class DeletePedidoHandler : IHandler<DeletePedidoCommand, Result<int>>
 {
     private readonly IPedidoRepository _repo;
 
@@ -13,13 +14,18 @@ public class DeletePedidoHandler : IDeletePedidoHandler
         _repo = repo;
     }
 
-    public async Task HandleDeletePedido(DeletePedidoCommand command)
+    public async Task<Result<int>> HandleAsync(DeletePedidoCommand command,CancellationToken cancellationToken)
     {
-        var pedido = await _repo.GetByIdAsync(command.Id);
+        var pedido = await _repo.GetByIdAsync(command.Id, cancellationToken);
 
         if (pedido is null)
             throw new DomainException("Pedido não encontrado");
 
-        await _repo.DeleteAsync(pedido);
+        var deleteResult = await _repo.DeleteAsync(pedido, cancellationToken);
+
+   
+        return  deleteResult.Value > 0 ? 
+            Result.Success<int>(deleteResult.Value) 
+            : Result.Failure<int>(new Error("DELETE_ERROR","Failed to delete pedido"));
     }
 }

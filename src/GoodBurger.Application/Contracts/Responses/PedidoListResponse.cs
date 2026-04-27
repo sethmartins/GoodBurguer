@@ -10,4 +10,4 @@ public record PedidoListResponse(
     decimal Total,
     int QuantidadeItens,
     List<ItemResponse> Itens
-):IResponse;
+);

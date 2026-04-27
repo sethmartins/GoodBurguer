@@ -1,4 +1,5 @@
 ﻿using GoodBurger.Application.Contracts.Responses;
+using GoodBurger.Domain.Abstractions;
 
 namespace GoodBurger.Web.Services;
 
@@ -11,8 +12,8 @@ public sealed class ItemService
         _http = http;
     }
 
-    public async Task<List<ItemResponse>> GetAll()
+    public async Task<IEnumerable<ItemResponse>> GetAll()
     {
-        return await _http.GetFromJsonAsync<List<ItemResponse>>("/api/cardapio");
+        return await _http.GetFromJsonAsync<IEnumerable<ItemResponse>>("/api/cardapio");
     }
 }

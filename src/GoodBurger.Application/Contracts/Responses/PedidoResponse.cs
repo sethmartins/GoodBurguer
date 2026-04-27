@@ -10,5 +10,5 @@ public record PedidoResponse(
     decimal Desconto,
     decimal PercentualDesconto,
     decimal Total,
-    List<ItemResponse> Itens
-):IResponse;
+    List<ItemPedidoResponse> Itens
+);

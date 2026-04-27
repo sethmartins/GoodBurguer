@@ -1,17 +1,14 @@
-﻿
-using GoodBurger.Application.Abstractions;
+﻿using GoodBurger.Application.Abstractions;
 using GoodBurger.Application.Contracts.Requests;
 using GoodBurger.Application.Contracts.Responses;
 using GoodBurger.Application.Pedidos.Commands.CreatePedido;
 using GoodBurger.Application.Pedidos.Commands.DeletePedido;
 using GoodBurger.Application.Pedidos.Commands.UpdatePedido;
-using GoodBurger.Application.Pedidos.DTOs;
 using GoodBurger.Application.Pedidos.Queries.GetAllPedidos;
 using GoodBurger.Application.Pedidos.Queries.GetPedidoById;
-using GoodBurger.Domain.Models;
-using GoodBurger.Domain.ValueObjects;
+using GoodBurger.Domain.Abstractions;
+
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata;
 
 namespace GoodBurger.API.Controllers;
 
@@ -20,82 +17,84 @@ namespace GoodBurger.API.Controllers;
 
 public sealed class PedidoController(IMediator mediator) : ControllerBase
 {
-  
 
-    [HttpPost]
-   
-    public async Task<IActionResult> Create(CreatePedidoRequest request)
+    [HttpPost]   
+    public async Task<IActionResult> Create( 
+        [FromServices] IHandler<CreatePedidoCommand, Result<PedidoResponse>> handler,
+        CreatePedidoRequest request, 
+        CancellationToken cancellationToken)
     {
         var command = new CreatePedidoCommand(request.ItemIds);
 
-        var pedido = await mediator.HandleCreatePedido(command);
+        var pedido = await handler.HandleAsync(command, cancellationToken);
 
-        return Ok(new PedidoResponse(
-                pedido.Id,
-                pedido.Subtotal,
-                pedido.Desconto,
-                pedido.PercentualDesconto * 100,
-                pedido.Total,
-                pedido.Itens.Select(i =>
-                    new ItemResponse(i.Id,i.Nome, i.Preco, i.Tipo)).ToList<ItemResponse>()
-                    ?? new List<ItemResponse>()
-));
+        if (pedido.IsSuccess)
+        { 
+            return Ok(pedido.Value);
+        }
+
+        return BadRequest(pedido.Error);
+
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(Guid id)
+    public async Task<IActionResult> GetById(
+        [FromServices] IHandler<GetPedidoByIdQuery, Result<PedidoResponse?>> handler, 
+        Guid id, 
+        CancellationToken cancellationToken)
     {
-        var pedido = await mediator.HandleGetPedidoById(new GetPedidoByIdQuery(id));
+        var pedido = await handler.HandleAsync(new GetPedidoByIdQuery(id), cancellationToken);
 
-        if (pedido is null)
-            return NotFound();
+        if (pedido.IsSuccess)
+        {
+            return Ok(pedido.Value);
+        }
 
-        var response = new PedidoResponse(
-            pedido.Id,
-            pedido.Subtotal,
-            pedido.Desconto,
-            pedido.PercentualDesconto * 100,
-            pedido.Total,
-            pedido.Itens.Select(i =>
-                new ItemResponse(i.ItemId,i.Nome, i.Preco, i.Tipo)).ToList()
-);
-
-        return Ok(response);
+       return NotFound(pedido.IsFailure);
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(
+        [FromServices] IHandler<GetAllPedidosQuery, Result<IEnumerable<PedidoResponse>>> handler,
+        CancellationToken cancellationToken)
     {
-        var pedidos = await mediator.HandleGetAllPedidos(new GetAllPedidosQuery());
-
-        var response = pedidos.Select(p => new PedidoListResponse(
-            p.Id,
-            p.Subtotal,
-            p.Desconto,
-            p.PercentualDesconto * 100, 
-            p.Total,
-            p.Itens.Count,
-            p.Itens.Select(i =>
-                new ItemResponse(i.ItemId, i.Nome, i.Preco, i.Tipo)).ToList())
-        );
+        var result = await handler.HandleAsync(new GetAllPedidosQuery(), cancellationToken);
         
-
-        return Ok(response);
+        if (result.IsSuccess)
+        {
+            return Ok(result.Value);
+        }
+        return BadRequest(result.Error);        
     }
+
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, UpdatePedidoRequest request)
+    public async Task<IActionResult> Update(
+        [FromServices] IHandler<UpdatePedidoCommand, Result<PedidoResponse>> handler,
+        Guid id, UpdatePedidoRequest request,
+        CancellationToken cancellationToken)
     {
         var command = new UpdatePedidoCommand(id, request.ItemIds);
 
-        var response = await mediator.HandleUpdatePedido(command);
+        var response = await handler.HandleAsync(command, cancellationToken);
 
-        return Ok(response);
+        if (response.IsSuccess)
+        {
+            return Ok(response.Value);
+        }
+
+        return BadRequest(response.Error);
     }
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
-    {
-        await mediator.HandleDeletePedido(new DeletePedidoCommand(id));
 
-        return NoContent();
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id,CancellationToken cancellationToken)
+    {
+        // Para mostrar o uso diretor do mediator sem depender do handler específico, podemos criar um comando diretamente aqui e enviá-lo para o mediator.
+        var response = await mediator.HandleDeletePedido(new DeletePedidoCommand(id),cancellationToken);
+        if(response > 0)
+        {
+            return NoContent();
+        }
+
+        return BadRequest(response);
     }
 }

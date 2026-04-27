@@ -5,38 +5,16 @@ using GoodBurger.Application.Pedidos.Commands.DeletePedido;
 using GoodBurger.Application.Pedidos.Commands.UpdatePedido;
 using GoodBurger.Application.Pedidos.Queries.GetAllPedidos;
 using GoodBurger.Application.Pedidos.Queries.GetPedidoById;
-using GoodBurger.Application.Utils;
-using GoodBurger.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using GoodBurger.Domain.Abstractions;
 
 namespace GoodBurger.Application.Abstractions;
 
 public interface IMediator
 {    
-    public Task<PedidoResponse> HandleCreatePedido(CreatePedidoCommand command);
-    public Task HandleDeletePedido(DeletePedidoCommand command);
-    public Task<PedidoResponse> HandleUpdatePedido(UpdatePedidoCommand command);
-    public Task<IEnumerable<Pedido>> HandleGetAllPedidos(GetAllPedidosQuery query);
-    public Task<Pedido?> HandleGetPedidoById(GetPedidoByIdQuery query);
-    public Task<IEnumerable<Item>> HandleGetAllItems(GetAllItemsQuery query);
-}
-
-
-
-public interface ICommand 
-{
-    
-
-}
-public interface IResponse
-{
-
-
-}
-public interface IQuery 
-{
-
-
+    public Task<PedidoResponse> HandleCreatePedido(CreatePedidoCommand command, CancellationToken cancellationToken);
+    public Task<int> HandleDeletePedido(DeletePedidoCommand command, CancellationToken cancellationToken);
+    public Task<PedidoResponse> HandleUpdatePedido(UpdatePedidoCommand command, CancellationToken cancellationToken);
+    public Task<Result<IEnumerable<PedidoResponse>>> HandleGetAllPedidos(GetAllPedidosQuery query,CancellationToken cancellationToken);
+    public Task<Result<PedidoResponse?>> HandleGetPedidoById(GetPedidoByIdQuery query, CancellationToken cancellationToken);
+    public Task<Result<IEnumerable<ItemResponse>>> HandleGetAllItems(GetAllItemsQuery query, CancellationToken cancellationToken);
 }

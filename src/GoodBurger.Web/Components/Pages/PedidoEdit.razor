@@ -1,5 +1,6 @@
 ﻿@page "/pedidos/{Id:guid}"
 @using GoodBurger.Application.Contracts.Responses
+@using GoodBurger.Domain.Abstractions
 @using GoodBurger.Web.Services
 @rendermode InteractiveServer
 
@@ -42,16 +43,17 @@ else
 @code {
     [Parameter] public Guid Id { get; set; }
 
-    private List<ItemResponse> itens;
+    private IEnumerable<ItemResponse> itens;
     private List<int> selecionados = new();
     private string erro;
 
     protected override async Task OnInitializedAsync()
     {
-        itens = await ItemService.GetAll();
+        var result = await ItemService.GetAll();
+        itens = result;
 
         var pedido = await PedidoService.GetById(Id);
-        selecionados = pedido.Itens.Select(i => i.Id).ToList();
+        selecionados = pedido.Itens.Select(i => i.ItemId).ToList();
     }
 
     private void Toggle(int id, object value)

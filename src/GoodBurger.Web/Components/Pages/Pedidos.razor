@@ -1,6 +1,7 @@
 ﻿@page "/"
 @page "/pedidos"
 @using GoodBurger.Application.Contracts.Responses
+@using GoodBurger.Domain.Abstractions
 @using GoodBurger.Web.Services
 @rendermode InteractiveServer
 
@@ -60,11 +61,11 @@ else
 }
 
 @code {
-    private List<PedidoResponse> pedidos;
+    private IEnumerable<PedidoResponse> pedidos;
 
     protected override async Task OnInitializedAsync()
     {
-        pedidos = await Service.GetAll();
+        pedidos = await Service.GetAll(CancellationToken.None);
     }
 
     private void Editar(Guid id)
@@ -75,6 +76,6 @@ else
     private async Task Deletar(Guid id)
     {
         await Service.Delete(id);
-        pedidos = await Service.GetAll();
+        pedidos = await Service.GetAll(CancellationToken.None);
     }
 }

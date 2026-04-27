@@ -1,5 +1,6 @@
 ﻿@page "/pedidos/novo"
 @using GoodBurger.Application.Contracts.Responses
+@using GoodBurger.Domain.Abstractions
 @using GoodBurger.Web.Services
 @rendermode InteractiveServer
 
@@ -36,13 +37,14 @@ else
 }
 
 @code {
-    private List<ItemResponse> itens;
+    private IEnumerable<ItemResponse> itens;
     private List<int> selecionados = new();
     private string erro;
 
     protected override async Task OnInitializedAsync()
     {
-        itens = await ItemService.GetAll();
+        var result = await ItemService.GetAll();
+        itens = result;
     }
 
     private void Toggle(int id, object value)

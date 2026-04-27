@@ -1,6 +1,4 @@
 ﻿using GoodBurger.Application.Abstractions;
-using GoodBurger.Application.Abstractions.Cardapios;
-using GoodBurger.Application.Abstractions.Pedidos;
 using GoodBurger.Application.Cardapio.Queries.GetAllItems;
 using GoodBurger.Application.Contracts.Responses;
 using GoodBurger.Application.Pedidos.Commands.CreatePedido;
@@ -8,30 +6,31 @@ using GoodBurger.Application.Pedidos.Commands.DeletePedido;
 using GoodBurger.Application.Pedidos.Commands.UpdatePedido;
 using GoodBurger.Application.Pedidos.Queries.GetAllPedidos;
 using GoodBurger.Application.Pedidos.Queries.GetPedidoById;
-using GoodBurger.Domain.Models;
+using GoodBurger.Domain.Abstractions;
+
 
 namespace GoodBurger.Application.Utils;
 
 public class Mediator : IMediator
 {
-    private readonly ICreatePedidoHandler _create;
-    private readonly IGetPedidoByIdHandler _get;
-    private readonly IGetAllPedidosHandler _getAllHandler;
-    private readonly IUpdatePedidoHandler _updateHandler;
-    private readonly IDeletePedidoHandler _deleteHandler;
-    private readonly IGetAllItemsHandler _handler;
+    private readonly IHandler<CreatePedidoCommand, Result<PedidoResponse>> _create;
+    private readonly IHandler<GetPedidoByIdQuery, Result<PedidoResponse?>> _getPedidoByIdHandler;
+    private readonly IHandler<GetAllPedidosQuery, Result<IEnumerable<PedidoResponse>>> _getAllHandler;
+    private readonly IHandler<UpdatePedidoCommand, Result<PedidoResponse>> _updateHandler;
+    private readonly IHandler<DeletePedidoCommand, Result<int>> _deleteHandler;
+    private readonly IHandler<GetAllItemsQuery, Result<IEnumerable<ItemResponse>>> _handler;
 
 
     public Mediator(
-        ICreatePedidoHandler createPedidoHandler,
-        IGetPedidoByIdHandler getPedidoByIdHandler,
-        IGetAllPedidosHandler getAllPedidosHandler,
-        IUpdatePedidoHandler updatePedidoHandler,
-        IDeletePedidoHandler deletePedidoHandler,
-        IGetAllItemsHandler getAllItemsHandler)
+        IHandler<CreatePedidoCommand, Result<PedidoResponse>> createPedidoHandler,
+        IHandler<GetPedidoByIdQuery, Result<PedidoResponse?>> getPedidoByIdHandler,
+        IHandler<GetAllPedidosQuery, Result<IEnumerable<PedidoResponse>>> getAllPedidosHandler,
+        IHandler<UpdatePedidoCommand, Result<PedidoResponse>> updatePedidoHandler,
+        IHandler<DeletePedidoCommand, Result<int>> deletePedidoHandler,
+        IHandler<GetAllItemsQuery, Result<IEnumerable<ItemResponse>>> getAllItemsHandler)
     {
         _create = createPedidoHandler;
-        _get = getPedidoByIdHandler;
+        _getPedidoByIdHandler = getPedidoByIdHandler;
         _getAllHandler = getAllPedidosHandler;
         _updateHandler = updatePedidoHandler;
         _deleteHandler = deletePedidoHandler;
@@ -42,33 +41,36 @@ public class Mediator : IMediator
         
     }
 
-    public Task<PedidoResponse> HandleCreatePedido(CreatePedidoCommand command)
+    public async Task<PedidoResponse> HandleCreatePedido(CreatePedidoCommand command, CancellationToken cancellationToken)
     {
-        return _create.HandleCreatePedido(command);
+        var result = await _create.HandleAsync(command, cancellationToken);
+        return result.Value;
     }
 
-    public Task HandleDeletePedido(DeletePedidoCommand command)
+    public async Task<int> HandleDeletePedido(DeletePedidoCommand command, CancellationToken cancellationToken)
     {
-        return _deleteHandler.HandleDeletePedido(command);
+        var result = await _deleteHandler.HandleAsync(command, cancellationToken);
+        return result.Value;
     }
 
-    public Task<PedidoResponse> HandleUpdatePedido(UpdatePedidoCommand command)
+    public async Task<PedidoResponse> HandleUpdatePedido(UpdatePedidoCommand command, CancellationToken cancellationToken)
     {
-        return _updateHandler.HandleUpdatePedido(command);
+        var result = await _updateHandler.HandleAsync(command, cancellationToken);
+        return result.Value;
     }
 
-    public Task<IEnumerable<Pedido>> HandleGetAllPedidos(GetAllPedidosQuery query)
+    public async Task<Result<IEnumerable<PedidoResponse>>> HandleGetAllPedidos(GetAllPedidosQuery query, CancellationToken cancellationToken)
     {
-        return _getAllHandler.HandleGetAllPedidos(query);
+        return await _getAllHandler.HandleAsync(query, cancellationToken);
     }
 
-    public Task<Pedido?> HandleGetPedidoById(GetPedidoByIdQuery query)
+    public async Task<Result<PedidoResponse?>> HandleGetPedidoById(GetPedidoByIdQuery query, CancellationToken cancellationToken)
     {
-        return _get.HandleGetPedidoById(query);
+        return await _getPedidoByIdHandler.HandleAsync(query, cancellationToken);
     }
 
-    public Task<IEnumerable<Item>> HandleGetAllItems(GetAllItemsQuery query)
+    public async Task<Result<IEnumerable<ItemResponse>>> HandleGetAllItems(GetAllItemsQuery query, CancellationToken cancellationToken)
     {
-        return _handler.HandleGetAllItems(query);
+        return await _handler.HandleAsync(query, cancellationToken);
     }
 }

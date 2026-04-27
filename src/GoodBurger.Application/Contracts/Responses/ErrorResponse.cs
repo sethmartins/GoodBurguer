@@ -4,7 +4,7 @@ using GoodBurger.Application.Abstractions;
 
 namespace GoodBurger.Application.Contracts.Responses;
 
-public record ErrorResponse : IResponse
+public record ErrorResponse 
 {
     public ErrorResponse(string type, object? correlationId, string message)
     {

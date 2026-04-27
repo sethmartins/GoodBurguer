@@ -16,7 +16,8 @@ public static class PedidoMapper
             pedido.PercentualDesconto * 100,
             pedido.Total,
             pedido.Itens.Select(i =>
-                new ItemResponse(
+                new ItemPedidoResponse(
+                    i.Id,
                     i.ItemId,
                     i.Nome,
                     i.Preco,

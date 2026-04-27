@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using GoodBurger.Application.Contracts.Responses;
 using GoodBurger.Domain.Exceptions;
-using System.Text.Json;
+
 
 namespace GoodBurger.API.Middleware;
 

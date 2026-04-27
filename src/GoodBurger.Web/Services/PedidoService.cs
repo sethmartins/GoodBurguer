@@ -1,4 +1,5 @@
 ﻿using GoodBurger.Application.Contracts.Responses;
+using GoodBurger.Domain.Abstractions;
 
 namespace GoodBurger.Web.Services;
 
@@ -11,8 +12,12 @@ public sealed class PedidoService
         _http = http;
     }
 
-    public async Task<List<PedidoResponse>> GetAll()
-        => await _http.GetFromJsonAsync<List<PedidoResponse>>("/api/Pedido");
+    public async Task<IEnumerable<PedidoResponse>> GetAll(CancellationToken cancellationToken)
+    {
+        var response = await _http.GetFromJsonAsync<IEnumerable<PedidoResponse>>("/api/Pedido", cancellationToken);
+        return response ?? new List<PedidoResponse>();
+    }
+        
 
     public async Task<PedidoResponse> GetById(Guid id)
         => await _http.GetFromJsonAsync<PedidoResponse>($"/api/Pedido/{id}");

@@ -1,38 +1,46 @@
 ﻿using GoodBurger.Application.Abstractions;
-using GoodBurger.Application.Contracts.Responses;
 using GoodBurger.Domain.Models;
 using GoodBurger.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
-
 
 namespace GoodBurger.Infrastructure.Repository;
 
 public sealed class PedidoRepository(AppDbContext context) : IPedidoRepository
 {
-    public async Task AddAsync(Pedido pedido)
+    public async Task<int?> AddAsync(Pedido pedido, CancellationToken cancellationToken)
     {
         context.Pedidos.Add(pedido);
-        await context.SaveChangesAsync();
+        var result = await context.SaveChangesAsync(cancellationToken);
+        return result;
     }
 
-    public async Task<Pedido?> GetByIdAsync(Guid id) 
-        => await context.Pedidos.FindAsync(id);
-    public async Task<IEnumerable<Pedido>> GetAllAsync()
+    public async Task<Pedido?> GetByIdAsync(Guid id,CancellationToken cancellationToken = default)
+    {         
+        var pedido = await context.Pedidos.Include(p => p.Itens).FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+
+        if (pedido == null)
+            return null;        
+
+        return pedido;
+    } 
+        
+    public async Task<IEnumerable<Pedido?>> GetAllAsync( CancellationToken cancellationToken = default)
     {
-        return await context.Pedidos
-            .Include(p => p.Itens)            
-            .ToListAsync();
+        return await context.Pedidos.Include(p => p.Itens).ToListAsync(cancellationToken);       
+            
     }
 
-    public async Task UpdateAsync(Pedido pedido)
+    public async Task<int?> UpdateAsync(Pedido pedido, CancellationToken cancellationToken = default)
     {
         context.Pedidos.Update(pedido);
-        await context.SaveChangesAsync();
+        var result = await context.SaveChangesAsync(cancellationToken);
+        return result;
     }
 
-    public async Task DeleteAsync(Pedido pedido)
+    public async Task<int?> DeleteAsync(Pedido pedido, CancellationToken cancellationToken = default)
     {
         context.Pedidos.Remove(pedido);
-        await context.SaveChangesAsync();
+        var result = await context.SaveChangesAsync(cancellationToken);
+        return result;
     }
 }

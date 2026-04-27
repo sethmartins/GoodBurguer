@@ -1,12 +1,13 @@
 ﻿using GoodBurger.Application.Abstractions;
-using GoodBurger.Application.Abstractions.Pedidos;
 using GoodBurger.Application.Contracts.Responses;
+using GoodBurger.Domain.Abstractions;
+using GoodBurger.Domain.Abstractions.Errors;
 using GoodBurger.Domain.Exceptions;
 using GoodBurger.Domain.Models;
 
 namespace GoodBurger.Application.Pedidos.Commands.CreatePedido;
 
-public sealed class CreatePedidoHandler : ICreatePedidoHandler
+public sealed class CreatePedidoHandler : IHandler<CreatePedidoCommand, Result<PedidoResponse>>
 {
     private readonly IPedidoRepository _pedidoRepo;
     private readonly IItemRepository _itemRepo;
@@ -19,7 +20,7 @@ public sealed class CreatePedidoHandler : ICreatePedidoHandler
         _itemRepo = itemRepo;
     }
 
-    public async Task<PedidoResponse> HandleCreatePedido(CreatePedidoCommand command)
+    public async Task<Result<PedidoResponse>> HandleAsync(CreatePedidoCommand command, CancellationToken cancellationToken)
     {
         var items = await _itemRepo.GetByIdsAsync(command.ItemIds);
 
@@ -29,26 +30,31 @@ public sealed class CreatePedidoHandler : ICreatePedidoHandler
         var pedido = new Pedido();
 
         foreach (var item in items)
-            pedido.AdicionarItem(item);
+            pedido.AdicionarItem(new Item(item.Id, item.Nome, item.Preco, item.Tipo));
 
         pedido.FecharPedido();
 
-        await _pedidoRepo.AddAsync(pedido);
+        var addResult = await _pedidoRepo.AddAsync(pedido, cancellationToken);
+        if (addResult == 0)
+            return Result.Failure<PedidoResponse>(new Error("CREATE_ERROR", "Erro ao criar o pedido"));
 
-        return new PedidoResponse(
+        var pedidoResponse = new PedidoResponse(
             pedido.Id,
             pedido.Subtotal,
             pedido.Desconto,
-            pedido.PercentualDesconto,
+            pedido.PercentualDesconto * 100,
             pedido.Total,
             pedido.Itens.Select(i =>
-                new ItemResponse(
+                new ItemPedidoResponse(
+                    i.Id,
                     i.ItemId,
                     i.Nome, 
                     i.Preco,
                     i.Tipo)
-                ).ToList<ItemResponse>()
-                ?? new List<ItemResponse>() 
+                ).ToList<ItemPedidoResponse>()
+                ?? new List<ItemPedidoResponse>() 
         ) ;
+        return Result.Success<PedidoResponse>(pedidoResponse);
     }
 }
+        

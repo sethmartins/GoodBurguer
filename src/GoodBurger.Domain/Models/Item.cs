@@ -17,4 +17,11 @@ public sealed class Item
         Preco = preco;
         Tipo = tipo;
     }
+    public Item(int id, string nome, decimal preco, TipoItem tipo)
+    {
+        Id = id;
+        Nome = nome;
+        Preco = preco;
+        Tipo = tipo;
+    }
 }
