@@ -1,4 +1,4 @@
-﻿using GoodBurger.Application.Pedidos.DTOs;
+﻿using GoodBurger.Application.Features.Pedidos.DTOs;
 using GoodBurger.Domain.Enums;
 
 namespace GoodBurger.Application.Contracts.Requests;

@@ -1,11 +1,11 @@
 ﻿using GoodBurger.Application.Abstractions;
 using GoodBurger.Application.Contracts.Requests;
 using GoodBurger.Application.Contracts.Responses;
-using GoodBurger.Application.Pedidos.Commands.CreatePedido;
-using GoodBurger.Application.Pedidos.Commands.DeletePedido;
-using GoodBurger.Application.Pedidos.Commands.UpdatePedido;
-using GoodBurger.Application.Pedidos.Queries.GetAllPedidos;
-using GoodBurger.Application.Pedidos.Queries.GetPedidoById;
+using GoodBurger.Application.Features.Pedidos.Commands.CreatePedido;
+using GoodBurger.Application.Features.Pedidos.Commands.UpdatePedido;
+using GoodBurger.Application.Features.Pedidos.Queries.GetAllPedidos;
+using GoodBurger.Application.Features.Pedidos.Queries.GetPedidoById;
+using GoodBurger.Application.Features.Pedidos.Commands.DeletePedido;
 using GoodBurger.Domain.Abstractions;
 
 using Microsoft.AspNetCore.Mvc;

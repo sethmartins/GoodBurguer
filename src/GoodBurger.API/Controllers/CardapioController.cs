@@ -1,6 +1,6 @@
 ﻿using GoodBurger.Application.Abstractions;
-using GoodBurger.Application.Cardapio.Queries.GetAllItems;
 using GoodBurger.Application.Contracts.Responses;
+using GoodBurger.Application.Features.Cardapio.Queries.GetAllItems;
 using GoodBurger.Domain.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 

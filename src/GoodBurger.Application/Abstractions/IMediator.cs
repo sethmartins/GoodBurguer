@@ -1,10 +1,10 @@
-﻿using GoodBurger.Application.Cardapio.Queries.GetAllItems;
-using GoodBurger.Application.Contracts.Responses;
-using GoodBurger.Application.Pedidos.Commands.CreatePedido;
-using GoodBurger.Application.Pedidos.Commands.DeletePedido;
-using GoodBurger.Application.Pedidos.Commands.UpdatePedido;
-using GoodBurger.Application.Pedidos.Queries.GetAllPedidos;
-using GoodBurger.Application.Pedidos.Queries.GetPedidoById;
+﻿using GoodBurger.Application.Contracts.Responses;
+using GoodBurger.Application.Features.Cardapio.Queries.GetAllItems;
+using GoodBurger.Application.Features.Pedidos.Commands.CreatePedido;
+using GoodBurger.Application.Features.Pedidos.Commands.DeletePedido;
+using GoodBurger.Application.Features.Pedidos.Commands.UpdatePedido;
+using GoodBurger.Application.Features.Pedidos.Queries.GetAllPedidos;
+using GoodBurger.Application.Features.Pedidos.Queries.GetPedidoById;
 using GoodBurger.Domain.Abstractions;
 
 namespace GoodBurger.Application.Abstractions;
